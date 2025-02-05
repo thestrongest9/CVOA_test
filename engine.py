@@ -105,6 +105,7 @@ def cvo_algo(obstacles=[], player=None):
 
     #remove any velocity that would cause collision
     for ob in obstacles:
+        #FIXME: When working on frame time divided version, need to set distance to very high number (need to take into account all bullets)
         if ob.get_distance(player) <= 128.0: #only consider obstacles close enough
             for v in possible_velocities:
                 #get how many frames it is safe to move in direction (velocity) v.
