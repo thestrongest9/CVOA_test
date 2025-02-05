@@ -71,7 +71,11 @@ def input_handler(): #instead of player input hand this over to the DQN (AI) to 
     return tuple(map(lambda i, j, k, l: (i+j+k+l)*multiplier, up, down, left, right))
             
 
-
+#Retunrns
+#x, y, frame_count
+#x = x direction of velocity
+#y = y direction of velocity
+#frame_count = the number of frames it is safe to move in that direction (velocity)
 def cvo_algo(obstacles=[], player=None):
     #these possible velocities should take into account
     #player can move in 8 directions
