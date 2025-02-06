@@ -105,12 +105,12 @@ def cvo_algo(obstacles=[], player=None):
     # safe_velocities = possible_velocities.copy()
     max_t_velocity = possible_velocities[random.randint(0, len(possible_velocities)-1)]
     
-    CHECK_FRAMES = 10 #amount of frames to check for collision
+    CHECK_FRAMES = 20 #amount of frames to check for collision
 
     #remove any velocity that would cause collision
     for ob in obstacles:
         #FIXME: When working on frame time divided version, need to set distance to very high number (need to take into account all bullets)
-        if ob.get_distance(player) <= 128.0: #only consider obstacles close enough
+        if True:#ob.get_distance(player) <= 128.0: #only consider obstacles close enough
             for v in possible_velocities:
                 #get how many frames it is safe to move in direction (velocity) v.
                 no_collision_frames = ob.check_steps_ahead(CHECK_FRAMES, player, v)
@@ -118,10 +118,41 @@ def cvo_algo(obstacles=[], player=None):
                     dir_collision[v] = no_collision_frames
 
     max_frames = 0
-    for direction, frames in dir_collision.items(): #from all {velocity:frames until collision}, get velocity with highest frames
-        if max_frames < frames:
-            max_t_velocity = direction
-            max_frames = frames
+    
+    #greedy choose current best
+    # for direction, frames in dir_collision.items(): #from all {velocity:frames until collision}, get velocity with highest frames
+    #     if max_frames < frames:
+    #         max_t_velocity = direction
+    #         max_frames = frames
+
+    # #choose from some safe velocities
+    # safe_velocities = []
+    # for direction in dir_collision.keys():
+    #     if dir_collision[direction] >= 7:
+    #         safe_velocities.append(direction)
+    # if safe_velocities != []:
+    #     # print(len(safe_velocities))
+    #     max_t_velocity = safe_velocities[random.randint(0, len(safe_velocities)-1)]
+    
+    # max_frames = dir_collision[max_t_velocity]
+
+    #choose from some safe velocities
+    safe_velocities = []
+    dist = float("inf")
+    for direction in dir_collision.keys():
+        if dir_collision[direction] >= 16:
+            safe_velocities.append(direction)
+    if safe_velocities != []:
+        # print(len(safe_velocities))
+        # max_t_velocity = safe_velocities[random.randint(0, len(safe_velocities)-1)]
+        for dir in safe_velocities:
+            dir_x, dir_y = dir
+            temp = abs(player.rect.x + dir_x - 320) * 0.5 + abs(player.rect.y + dir_y - 240)
+            if temp <= dist:
+                max_t_velocity = dir
+                dist = temp
+    
+    max_frames = dir_collision[max_t_velocity]
 
     x, y = max_t_velocity #FIXME: Better way to do this?
     # print(max_t_velocity)
@@ -185,18 +216,18 @@ def game_loop():
 
             #FIXME: Frame counting method could work...
             #       I need to have a better look at this.
-            # if frame_cnt >= frames_to_next: #check if frame count for current velocity is done
-            #     x, y, frames = cvo_algo(objects, blue_test) #get new velocity, and frames until next move
-            #     frames_to_next = frames #get frames until next move
-            #     print(frames_to_next, frames)
-            #     CURRENT_VELOCITY = (x, y)
-            #     frame_cnt = 0 #reset frame count
-            # else: 
-            #     frame_cnt += 1 #else increment current frame count
+            if frame_cnt >= frames_to_next - 1: #check if frame count for current velocity is done
+                x, y, frames = cvo_algo(objects, blue_test) #get new velocity, and frames until next move
+                frames_to_next = frames #get frames until next move
+                # print(frames_to_next, frames)
+                CURRENT_VELOCITY = (x, y)
+                frame_cnt = 0 #reset frame count
+            else: 
+                frame_cnt += 1 #else increment current frame count
             
-            #NOTE: This calculates a new velocity (direction) every tick
-            x, y, frames = cvo_algo(objects, blue_test) #get new velocity, and frames until next move
-            CURRENT_VELOCITY = (x, y)
+            # #NOTE: This calculates a new velocity (direction) every tick
+            # x, y, frames = cvo_algo(objects, blue_test) #get new velocity, and frames until next move
+            # CURRENT_VELOCITY = (x, y)
 
             # dx, dy = input_value  #direct control
 
