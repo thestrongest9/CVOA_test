@@ -137,15 +137,26 @@ def cvo_algo(obstacles=[], player=None):
     # max_frames = dir_collision[max_t_velocity]
 
     #choose from some safe velocities
-    safe_velocities = []
+    safe_velocities = {}
+    GREATEST_POSSIBLE_FRAMES = None
     dist = float("inf")
-    for direction in dir_collision.keys():
-        if dir_collision[direction] >= 20:
-            safe_velocities.append(direction)
-    if safe_velocities != []:
+    for direction, frames in dir_collision.items():
+        if frames not in safe_velocities:
+            safe_velocities[frames] = [direction]
+        else:
+            safe_velocities[frames].append(direction)
+        
+        #check if greatest number of frames possible from current set of directions
+        if GREATEST_POSSIBLE_FRAMES == None:
+            GREATEST_POSSIBLE_FRAMES = frames
+        else:
+            if frames > GREATEST_POSSIBLE_FRAMES:
+                GREATEST_POSSIBLE_FRAMES = frames
+
+    if GREATEST_POSSIBLE_FRAMES != None:
         # print(len(safe_velocities))
         # max_t_velocity = safe_velocities[random.randint(0, len(safe_velocities)-1)]
-        for dir in safe_velocities:
+        for dir in safe_velocities[GREATEST_POSSIBLE_FRAMES]:
             dir_x, dir_y = dir
             temp = abs(player.rect.x + dir_x - 320) * 0.5 + abs(player.rect.y + dir_y - 240)
             if temp <= dist:
