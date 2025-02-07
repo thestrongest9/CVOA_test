@@ -114,7 +114,7 @@ def cvo_algo(obstacles=[], player=None):
             for v in possible_velocities:
                 #get how many frames it is safe to move in direction (velocity) v.
                 no_collision_frames = ob.check_steps_ahead(CHECK_FRAMES, player, v)
-                if dir_collision[v] > no_collision_frames:
+                if dir_collision[v] > no_collision_frames: #get the minimum amount of frames for that direction, based on collision detection with the obstacle
                     dir_collision[v] = no_collision_frames
 
     max_frames = 0
