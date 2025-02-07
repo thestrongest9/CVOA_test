@@ -54,9 +54,11 @@ class entity:
             #Create rects (essentialy AABB boxes) that simulate movement each frame (t). For the other object (usually player)
             for t_, value in rects.items(): #check for collisions by simulating the frames
                 #FIXME: This was suposed to make sure that Player doesn't leave play area, but not very effective...
-                if (other_rects[t_].width + 1 >= other_rects[t_].x >= 640 - other_rects[t_].width - 1) or (other_rects[t_].height + 1 >= other_rects[t_].y >= 480 - other_rects[t_].height - 1):
-                    # return t_ - 1
-                    return t_ -1 
+                # if (other_rects[t_].width + 1 >= other_rects[t_].x >= 640 - other_rects[t_].width - 1) or (other_rects[t_].height + 1 >= other_rects[t_].y >= 480 - other_rects[t_].height - 1):
+                if (other_rects[t_].width >= other_rects[t_].x >= 640 - other_rects[t_].width) or (other_rects[t_].height <= other_rects[t_].y >= 480 - other_rects[t_].height):
+                    return t_ - 1
+                    # print("ON EDGE")
+                    # return -1 
 
                 if pygame.Rect.colliderect(other_rects[t_], value):
                     return t_ - 1 #if collision detect at this point, return previous timestep where there was no collision
