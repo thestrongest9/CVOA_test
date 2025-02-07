@@ -170,7 +170,7 @@ def cvo_algo(obstacles=[], player=None):
         #choose closest to center
         for dir in safe_velocities[GREATEST_POSSIBLE_FRAMES]:
             dir_x, dir_y = dir
-            temp = abs(player.rect.x + dir_x - 320) * 0.5 + abs(player.rect.y + dir_y - 240)
+            temp = abs(player.rect.x + dir_x - 320) + abs(player.rect.y + dir_y - 240) #manhattan distance
             if temp <= dist:
                 max_t_velocity = dir
                 dist = temp
