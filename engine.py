@@ -170,7 +170,9 @@ def cvo_algo(obstacles=[], player=None):
         #choose closest to center
         for dir in safe_velocities[GREATEST_POSSIBLE_FRAMES]:
             dir_x, dir_y = dir
-            temp = abs(player.rect.x + dir_x - 320) + abs(player.rect.y + dir_y - 240) #manhattan distance
+            #manhattan distance
+            # y_axis * 2 => to emphasize y-axis movement more over x, otherwise when same good move appears, gets stuck beneath bullet and collides at bottom of screen.
+            temp = abs(player.rect.x + dir_x - 320) + abs(player.rect.y + dir_y - 240) * 2 
             if temp <= dist:
                 max_t_velocity = dir
                 dist = temp
