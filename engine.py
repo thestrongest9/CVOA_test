@@ -140,7 +140,7 @@ def cvo_algo(obstacles=[], player=None):
     safe_velocities = []
     dist = float("inf")
     for direction in dir_collision.keys():
-        if dir_collision[direction] >= 16:
+        if dir_collision[direction] >= 20:
             safe_velocities.append(direction)
     if safe_velocities != []:
         # print(len(safe_velocities))
@@ -182,7 +182,7 @@ def game_loop():
     #create player
     color = (255, 0, 0)
     objects = [] #contains bullets (projectiles)
-    blue_test = entity((100,100), pygame.Rect(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 64, 5, 5), type_flag='player', color=pygame.Color('blue'))
+    blue_test = entity((100,100), pygame.Rect(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 64, 5, 5), type_flag='player', color=pygame.Color('yellow'))
 
     frame_cnt = 0
     CURRENT_VELOCITY = (0, 0)
