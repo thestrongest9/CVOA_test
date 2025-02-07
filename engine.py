@@ -94,6 +94,15 @@ def cvo_algo(obstacles=[], player=None):
         (-1 * multiplier,  0 * multiplier), #left
         ( 1 * multiplier,  0 * multiplier), #right
         # ( 0 * multiplier,  0 * multiplier), #stand still
+        #Without multiplier
+        ( 0, -1), #up
+        (-1, -1), #upleft
+        ( 1, -1), #upright
+        ( 0,  1), #down
+        (-1,  1), #downleft
+        ( 1,  1), #downright
+        (-1,  0), #left
+        ( 1,  0), #right
     ]
     
     #create a dictionary of smallest distance direction needs to go to collide with something
