@@ -111,6 +111,7 @@ def cvo_algo(obstacles=[], player=None):
     for ob in obstacles:
         #FIXME: When working on frame time divided version, need to set distance to very high number (need to take into account all bullets)
         if True:#ob.get_distance(player) <= 128.0: #only consider obstacles close enough
+        # if ob.get_distance(player) <= 256:#128.0: #only consider obstacles close enough
             for v in possible_velocities:
                 #get how many frames it is safe to move in direction (velocity) v.
                 no_collision_frames = ob.check_steps_ahead(CHECK_FRAMES, player, v)
@@ -156,12 +157,16 @@ def cvo_algo(obstacles=[], player=None):
     if GREATEST_POSSIBLE_FRAMES != None:
         # print(len(safe_velocities))
         # max_t_velocity = safe_velocities[random.randint(0, len(safe_velocities)-1)]
+
+        #choose closest to center
         for dir in safe_velocities[GREATEST_POSSIBLE_FRAMES]:
             dir_x, dir_y = dir
             temp = abs(player.rect.x + dir_x - 320) * 0.5 + abs(player.rect.y + dir_y - 240)
             if temp <= dist:
                 max_t_velocity = dir
                 dist = temp
+        #pick randomly
+        # max_t_velocity = safe_velocities[GREATEST_POSSIBLE_FRAMES][random.randint(0, len(safe_velocities[GREATEST_POSSIBLE_FRAMES])-1)]
     
     max_frames = dir_collision[max_t_velocity]
 
@@ -227,7 +232,12 @@ def game_loop():
 
             #FIXME: Frame counting method could work...
             #       I need to have a better look at this.
-            if frame_cnt >= frames_to_next - 1: #check if frame count for current velocity is done
+            
+            #NOTE:  -2 is safety margin
+            #WHY?:  Because frames_to_next = "amount of frames until collision in X direction"
+            #       Therefore, if we stop it two frames before, we get a nice safety margin, that allows for the
+            #       Player to move away
+            if frame_cnt >= frames_to_next - 2: #check if frame count for current velocity is done
                 x, y, frames = cvo_algo(objects, blue_test) #get new velocity, and frames until next move
                 frames_to_next = frames #get frames until next move
                 # print(frames_to_next, frames)
