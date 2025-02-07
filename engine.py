@@ -199,7 +199,8 @@ def dumb_spawner(start_position = 0):
     # start_position = random.randint(0, 640) #(random.randint(0, 640) // 16) * 16
     # return entity(location=(start_position, 0))
     #6, 6
-    return entity((30,30), pygame.Rect(start_position,0, 6, 6), color=pygame.Color('red'), velocity=(0, 2))
+    # return entity((30,30), pygame.Rect(start_position,0, 6, 6), color=pygame.Color('red'), velocity=(0, 2))
+    return entity((30,30), pygame.Rect(start_position,0, 6, 6), color=pygame.Color('red'), velocity=(random.randint(-2, 2), 2))
 
 def game_loop():
     pygame.init()
